@@ -84,6 +84,13 @@ public abstract class AbstractTtOpApiBase implements ITtOpBaseService, IRetryabl
                 (url2, headers, request2, t2) -> getInternal(url2, t2), url, null, null, t);
     }
 
+    @Override
+    public <T> T getWithHeader(String url, Multimap<String, String> headers, Class<T> t) {
+        return retryableExecuteRequest((url2, headers2, request2, t2) -> {
+            return getInternal(url2, t2);
+        }, url, headers, null, t);
+    }
+
     private <T> T getInternal(String url, Class<T> t) {
         return executeRequest((uriWithCommonParam, headers, request, t2) ->
                                       getTiktokOpenHttpClient().get(uriWithCommonParam, t2), url, null, null, t);
@@ -254,11 +261,16 @@ public abstract class AbstractTtOpApiBase implements ITtOpBaseService, IRetryabl
                             this.getTtOpOAuth2Service().getJsapiTicket(true);
                             break;
                         }
-                        default:
+                        case OPEN_TICKET: {
+                            this.getTtOpOAuth2Service().getOpenTicket(true);
+                            break;
+                        }
                         case CLIENT: {
                             this.getTtOpOAuth2Service().getClientToken(true);
                             break;
                         }
+                        default:
+                            break;
                     }
                 }
             } finally {

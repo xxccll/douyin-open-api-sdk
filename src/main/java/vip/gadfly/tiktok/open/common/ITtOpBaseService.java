@@ -20,6 +20,8 @@ public interface ITtOpBaseService {
 
     <T> T get(String url, Class<T> t);
 
+    <T> T getWithHeader(String url, Multimap<String, String> headers, Class<T> t);
+
     <T> T post(String url, Object request, Class<T> t);
 
     <T> T postWithHeaders(String url, Multimap<String, String> headers, Object request, Class<T> t);

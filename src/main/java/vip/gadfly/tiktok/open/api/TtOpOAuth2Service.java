@@ -68,6 +68,13 @@ public interface TtOpOAuth2Service {
     String getJsapiTicket(boolean forceRefresh);
 
     /**
+     * 获取jsapi ticket
+     *
+     * @return token
+     */
+    String getOpenTicket(boolean forceRefresh);
+
+    /**
      * 获取ticket
      *
      * @return token

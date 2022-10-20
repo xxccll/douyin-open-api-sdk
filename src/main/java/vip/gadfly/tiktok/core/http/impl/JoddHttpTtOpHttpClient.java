@@ -48,7 +48,7 @@ public class JoddHttpTtOpHttpClient extends AbstractTtOpHttpClient {
         HttpResponse response = httpRequest.send().charset(StandardCharsets.UTF_8.name());
         log.info("httpRequest:{}, response:{}", httpRequest, response);
         if (clazz == byte[].class) {
-            return (T) response.body().getBytes(StandardCharsets.UTF_8);
+            return (T) response.bodyBytes();
         } else {
             return getJsonSerializer().parseResponse(response.bodyText(), clazz);
         }

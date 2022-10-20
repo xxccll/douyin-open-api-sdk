@@ -38,10 +38,14 @@ public class TtOpDefaultConfigImpl implements TtOpConfigStorage, Serializable {
     protected volatile String clientTicket;
     protected volatile long clientTicketExpiresTime;
 
+    protected volatile String openTicket;
+    protected volatile long openTicketExpiresTime;
+
     protected volatile Lock accessTokenLock = new ReentrantLock();
     protected volatile Lock refreshTokenLock = new ReentrantLock();
     protected volatile Lock jsapiTicketLock = new ReentrantLock();
     protected volatile Lock clientTicketLock = new ReentrantLock();
+    protected volatile Lock openTicketLock = new ReentrantLock();
 
     protected volatile File tmpDirFile;
 
@@ -119,6 +123,8 @@ public class TtOpDefaultConfigImpl implements TtOpConfigStorage, Serializable {
                 return this.clientTicket;
             case JSAPI:
                 return this.jsapiTicket;
+            case OPEN_TICKET:
+                return this.openTicket;
             default:
                 return null;
         }
@@ -128,10 +134,15 @@ public class TtOpDefaultConfigImpl implements TtOpConfigStorage, Serializable {
         switch (type) {
             case CLIENT:
                 this.clientTicket = ticket;
+                break;
             case JSAPI:
                 this.jsapiTicket = ticket;
                 break;
+            case OPEN_TICKET:
+                this.openTicket = ticket;
+                break;
             default:
+                break;
         }
     }
 
@@ -142,6 +153,8 @@ public class TtOpDefaultConfigImpl implements TtOpConfigStorage, Serializable {
                 return this.clientTicketLock;
             case JSAPI:
                 return this.jsapiTicketLock;
+            case OPEN_TICKET:
+                return this.openTicketLock;
             default:
                 return null;
         }
@@ -154,6 +167,8 @@ public class TtOpDefaultConfigImpl implements TtOpConfigStorage, Serializable {
                 return System.currentTimeMillis() > this.clientTicketExpiresTime;
             case JSAPI:
                 return System.currentTimeMillis() > this.jsapiTicketExpiresTime;
+            case OPEN_TICKET:
+                return System.currentTimeMillis() > this.openTicketExpiresTime;
             default:
                 return false;
         }
@@ -172,7 +187,13 @@ public class TtOpDefaultConfigImpl implements TtOpConfigStorage, Serializable {
                 // 预留200秒的时间
                 this.clientTicketExpiresTime = System.currentTimeMillis() + (expiresInSeconds - 200) * 1000L;
                 break;
+            case OPEN_TICKET:
+                this.openTicket = ticket;
+                // 预留200秒的时间
+                this.openTicketExpiresTime = System.currentTimeMillis() + (expiresInSeconds - 200) * 1000L;
+                break;
             default:
+                break;
         }
     }
 
@@ -185,7 +206,11 @@ public class TtOpDefaultConfigImpl implements TtOpConfigStorage, Serializable {
             case CLIENT:
                 this.clientTicketExpiresTime = 0;
                 break;
+            case OPEN_TICKET:
+                this.openTicketExpiresTime = 0;
+                break;
             default:
+                break;
         }
     }
 

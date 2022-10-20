@@ -1,8 +1,11 @@
 package vip.gadfly.tiktok.open.api.impl;
 
+import com.google.common.collect.LinkedListMultimap;
+import com.google.common.collect.Multimap;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.http.HttpHeaders;
 import vip.gadfly.tiktok.config.TtOpConfigStorage;
 import vip.gadfly.tiktok.core.enums.TtOpTicketType;
 import vip.gadfly.tiktok.core.util.URIUtil;
@@ -111,13 +114,31 @@ public class TtOpOauth2ServiceImpl implements TtOpOAuth2Service {
     }
 
     @Override
+    public String getOpenTicket(boolean forceRefresh) {
+        if (!forceRefresh) {
+            return ttOpBaseService.getTicket(TtOpTicketType.OPEN_TICKET);
+        }
+        String url = OAUTH2_OPEN_TICKET_URL.getUrl(getTtOpConfigStorage());
+        log.debug("url={}", url);
+        String accessToken = ttOpBaseService.getTicket(TtOpTicketType.CLIENT);
+        Multimap<String, String> headers = LinkedListMultimap.create();
+        headers.put("access-token", accessToken);
+        TtOpAccessTokenResult result = this.ttOpBaseService.getWithHeader(url, headers, TtOpAccessTokenResult.class);
+        this.getTtOpConfigStorage().updateTicket(TtOpTicketType.OPEN_TICKET, result.getTicket(), result.getExpiresIn());
+        return result.getTicket();
+    }
+
+    @Override
     public String getTicket(TtOpTicketType type, boolean forceRefresh) {
         switch (type) {
             case JSAPI:
                 return this.getJsapiTicket(forceRefresh);
-            default:
+            case OPEN_TICKET:
+                return this.getOpenTicket(forceRefresh);
             case CLIENT:
                 return this.getClientToken(forceRefresh);
+            default:
+                return null;
         }
     }
 }
