@@ -5,6 +5,7 @@ import com.google.common.collect.Multimap;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import vip.gadfly.tiktok.config.TtOpConfigStorage;
+import vip.gadfly.tiktok.core.enums.TtOpTicketType;
 import vip.gadfly.tiktok.open.api.TtOpVideoService;
 import vip.gadfly.tiktok.open.bean.video.*;
 import vip.gadfly.tiktok.open.common.ITtOpBaseService;
@@ -51,5 +52,14 @@ public class TtOpVideoServiceImpl implements TtOpVideoService {
                 openId, this.ttOpBaseService.getAccessToken(openId));
         log.debug("url={}, request={}", url, request);
         return this.ttOpBaseService.post(url, request, TtOpTiktokVideoDataResult.class);
+    }
+
+    @Override
+    public TtOpTiktokVideoPOIResult getTiktokVideoPOI(TtOpTiktokVideoPOIRequest request) {
+        log.debug("查询特定视频的视频数据, request={}", request);
+        String rawUrl = GET_TIKTOK__VIDEO_POI_URL.getUrl(getTtOpConfigStorage());
+        String url = String.format(rawUrl, this.ttOpBaseService.getTicket(TtOpTicketType.CLIENT, false));
+        log.debug("url={}, request={}", url, request);
+        return this.ttOpBaseService.post(url, request, TtOpTiktokVideoPOIResult.class);
     }
 }

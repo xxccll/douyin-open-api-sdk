@@ -118,12 +118,10 @@ public class TtOpOauth2ServiceImpl implements TtOpOAuth2Service {
         if (!forceRefresh) {
             return ttOpBaseService.getTicket(TtOpTicketType.OPEN_TICKET);
         }
-        String url = OAUTH2_OPEN_TICKET_URL.getUrl(getTtOpConfigStorage());
+        String rawUrl = OAUTH2_OPEN_TICKET_URL.getUrl(getTtOpConfigStorage());
+        String url = String.format(rawUrl, ttOpBaseService.getTicket(TtOpTicketType.CLIENT));
         log.debug("url={}", url);
-        String accessToken = ttOpBaseService.getTicket(TtOpTicketType.CLIENT);
-        Multimap<String, String> headers = LinkedListMultimap.create();
-        headers.put("access-token", accessToken);
-        TtOpAccessTokenResult result = this.ttOpBaseService.getWithHeader(url, headers, TtOpAccessTokenResult.class);
+        TtOpAccessTokenResult result = this.ttOpBaseService.get(url, TtOpAccessTokenResult.class);
         this.getTtOpConfigStorage().updateTicket(TtOpTicketType.OPEN_TICKET, result.getTicket(), result.getExpiresIn());
         return result.getTicket();
     }

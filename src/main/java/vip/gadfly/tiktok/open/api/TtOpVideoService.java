@@ -33,4 +33,12 @@ public interface TtOpVideoService {
      * @return 结果
      */
     TtOpTiktokVideoDataResult getTiktokSpecificVideoData(String openId, TtOpTiktokVideoDataRequest request);
+
+
+    /**
+     * 查询视频携带的地点信息
+     * @param request
+     * @return
+     */
+    TtOpTiktokVideoPOIResult getTiktokVideoPOI(TtOpTiktokVideoPOIRequest request);
 }

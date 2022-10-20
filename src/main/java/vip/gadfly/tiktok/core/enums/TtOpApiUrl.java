@@ -98,7 +98,7 @@ public interface TtOpApiUrl {
         /**
          * 获取jsapi ticket.
          */
-        OAUTH2_OPEN_TICKET_URL(TIKTOK_OPEN_API_HOST_URL, "/open/getticket/"),
+        OAUTH2_OPEN_TICKET_URL(TIKTOK_OPEN_API_HOST_URL, "/open/getticket/?access_token=%s"),
         /**
          * oauth2授权的url链接.
          */
@@ -132,6 +132,12 @@ public interface TtOpApiUrl {
          * 查询抖音指定视频数据
          */
         GET_TIKTOK_SPECIFIC_VIDEO_DATA_URL(TIKTOK_OPEN_API_HOST_URL, "/video/data/?open_id=%s&access_token=%s"),
+
+        /**
+         * 查询视频携带的地点信息
+         */
+        GET_TIKTOK__VIDEO_POI_URL(TIKTOK_OPEN_API_HOST_URL, "/poi/search/keyword/?access_token=%s"),
+
         ;
 
         private final String prefix;
