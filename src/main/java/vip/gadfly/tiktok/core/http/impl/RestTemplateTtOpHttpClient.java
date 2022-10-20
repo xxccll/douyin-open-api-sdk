@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -17,6 +18,7 @@ import vip.gadfly.tiktok.core.util.json.TiktokOpenJsonBuilder;
 import java.io.File;
 import java.lang.reflect.Field;
 import java.util.Collection;
+import java.util.Collections;
 
 /**
  * @author Clevo
@@ -53,8 +55,23 @@ public class RestTemplateTtOpHttpClient extends AbstractTtOpHttpClient {
 
     @Override
     public <T> T doGet(String url, Class<T> t) {
-        String result = restTemplate.getForObject(url, String.class);
-        return this.getJsonSerializer().parseResponse(result, t);
+        return doGetWithHeaders(url, null, t);
+    }
+
+    @Override
+    <T> T doGetWithHeaders(String url, Multimap<String, String> headers, Class<T> t) {
+        HttpHeaders httpHeaders = new HttpHeaders();
+        if (headers != null) {
+            for (String headerName : headers.keySet()) {
+                Collection<String> headerValues = headers.get(headerName);
+                for (String headerValue : headerValues) {
+                    httpHeaders.add(headerName, headerValue);
+                }
+            }
+        }
+        HttpEntity<Void> httpEntity = new HttpEntity<>(httpHeaders);
+        ResponseEntity<String> result = restTemplate.exchange(url, HttpMethod.GET, httpEntity, String.class, Collections.emptyMap());
+        return this.getJsonSerializer().parseResponse(result.getBody(), t);
     }
 
     @Override

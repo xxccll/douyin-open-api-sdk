@@ -9,6 +9,7 @@ import vip.gadfly.tiktok.core.util.json.TiktokOpenJsonBuilder;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.Collections;
 import java.util.Map;
 
 /**
@@ -46,10 +47,27 @@ public class OkHttpTtOpHttpClient extends AbstractTtOpHttpClient {
 
     @Override
     public <T> T doGet(String url, Class<T> clazz) {
+        return doGetWithHeaders(url, null, clazz);
+    }
+
+    @Override
+    <T> T doGetWithHeaders(String url, Multimap<String, String> headers, Class<T> t) {
+        Map<String, String> headersMap;
+        if (headers != null) {
+            headersMap = multimapHeaders2MapHeaders(headers);
+        } else {
+            headersMap = Collections.emptyMap();
+        }
+        Headers.Builder headersBuilder = Headers.of().newBuilder();
+        for (String headerName : headersMap.keySet()) {
+            String headerValue = headersMap.get(headerName);
+            headersBuilder.add(headerName, headerValue);
+        }
         Request request = new Request.Builder()
+                .headers(headersBuilder.build())
                 .url(url)
                 .build();
-        return doRequest(request, clazz);
+        return doRequest(request, t);
     }
 
     @Override

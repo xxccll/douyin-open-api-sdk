@@ -33,8 +33,13 @@ public abstract class AbstractTtOpHttpClient implements ITtOpHttpClient {
 
     @Override
     public <T> T get(String url, Class<T> clazz) {
+        return doGetWithHeaders(url, null, clazz);
+    }
+
+    @Override
+    public <T> T getWithHeaders(String url, Multimap<String, String> headers, Class<T> clazz) {
         log.info("get请求字节跳动接口,请求地址: 【{}】", url);
-        T response = doGet(url, clazz);
+        T response = doGetWithHeaders(url, headers, clazz);
         if (response instanceof ITtOpResponse) {
             log.info("请求字节跳动接口返回数据: 【{}】", getJsonSerializer().toJson(response));
         } else {
@@ -110,6 +115,7 @@ public abstract class AbstractTtOpHttpClient implements ITtOpHttpClient {
 
     abstract <T> T doGet(String url, Class<T> t);
 
+    abstract <T> T doGetWithHeaders(String url, Multimap<String, String> headers, Class<T> t);
 
     String doPost(String url, Object obj) {
         return doPost(url, obj, String.class);

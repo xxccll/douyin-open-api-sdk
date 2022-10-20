@@ -30,6 +30,15 @@ public interface ITtOpHttpClient {
      */
     <T> T get(String url, Class<T> t);
 
+    /**
+     * 当本Service没有实现某个API的时候，可以用这个，针对所有API中的GET请求.
+     *
+     * @param url
+     * @param t   返回对象的类型
+     * @return
+     */
+    <T> T getWithHeaders(String url, Multimap<String, String> headers, Class<T> t);
+
 
     /**
      * 当本Service没有实现某个API的时候，可以用这个，针对所有API中的POST请求.

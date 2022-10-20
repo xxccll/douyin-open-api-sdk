@@ -8,6 +8,7 @@ import vip.gadfly.tiktok.core.util.json.JsonSerializer;
 import vip.gadfly.tiktok.core.util.json.TiktokOpenJsonBuilder;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Collections;
 import java.util.Map;
 
 /**
@@ -27,15 +28,27 @@ public class JoddHttpTtOpHttpClient extends AbstractTtOpHttpClient {
 
     @Override
     <T> T doGet(String url, Class<T> clazz) {
+        return doGetWithHeaders(url, null, clazz);
+    }
+
+    @Override
+    <T> T doGetWithHeaders(String url, Multimap<String, String> headers, Class<T> t) {
+        Map<String, String> headersMap;
+        if (headers != null) {
+            headersMap = multimapHeaders2MapHeaders(headers);
+        } else {
+            headersMap = Collections.emptyMap();
+        }
         HttpResponse response = HttpRequest.get(url)
                 .contentTypeJson()
                 .acceptJson()
+                .header(headersMap)
                 .send()
                 .charset(StandardCharsets.UTF_8.name());
-        if (clazz == byte[].class) {
+        if (t == byte[].class) {
             return (T) response.bodyBytes();
         } else {
-            return getJsonSerializer().parseResponse(response.bodyText(), clazz);
+            return getJsonSerializer().parseResponse(response.bodyText(), t);
         }
     }
 
