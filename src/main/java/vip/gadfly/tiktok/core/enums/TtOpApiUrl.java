@@ -136,8 +136,11 @@ public interface TtOpApiUrl {
         /**
          * 查询视频携带的地点信息
          */
-        GET_TIKTOK__VIDEO_POI_URL(TIKTOK_OPEN_API_HOST_URL, "/poi/search/keyword/?access_token=%s"),
+        GET_TIKTOK_VIDEO_POI_URL(TIKTOK_OPEN_API_HOST_URL, "/poi/search/keyword/?access_token=%s"),
 
+        GET_TIKTOK_VIDEO_COMMENT_URL(TIKTOK_OPEN_API_HOST_URL, "/item/comment/list/?access_token=%s&open_id=%s&item_id=%s&cursor=%s&count=%s&sort_type=%s"),
+
+        GET_TIKTOK_VIDEO_COMMENT_REPLY_URL(TIKTOK_OPEN_API_HOST_URL, "/item/comment/reply/list/?access_token=%s&open_id=%s&item_id=%s&cursor=%s&count=%s&sort_type=%s&comment_id=%s"),
         ;
 
         private final String prefix;

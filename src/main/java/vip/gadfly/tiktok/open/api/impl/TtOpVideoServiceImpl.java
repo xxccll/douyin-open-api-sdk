@@ -57,9 +57,29 @@ public class TtOpVideoServiceImpl implements TtOpVideoService {
     @Override
     public TtOpTiktokVideoPOIResult getTiktokVideoPOI(TtOpTiktokVideoPOIRequest request) {
         log.debug("查询特定视频的视频数据, request={}", request);
-        String rawUrl = GET_TIKTOK__VIDEO_POI_URL.getUrl(getTtOpConfigStorage());
+        String rawUrl = GET_TIKTOK_VIDEO_POI_URL.getUrl(getTtOpConfigStorage());
         String url = String.format(rawUrl, this.ttOpBaseService.getTicket(TtOpTicketType.CLIENT, false));
         log.debug("url={}, request={}", url, request);
         return this.ttOpBaseService.post(url, request, TtOpTiktokVideoPOIResult.class);
+    }
+
+    @Override
+    public TtOpTiktokVideoCommentResult getTiktokVideoComments(TtOpTiktokVideoCommentRequest req) {
+        log.debug("查询特定视频的评论数据, req={}", req);
+        String rawUrl = GET_TIKTOK_VIDEO_COMMENT_URL.getUrl(getTtOpConfigStorage());
+        String accessToken = this.ttOpBaseService.getTicket(TtOpTicketType.CLIENT, false);
+        String url = String.format(rawUrl, accessToken, req.getOpenId(), req.getItemId(), req.getCursor(), req.getCount(), req.getSortType());
+        log.debug("url={}, req={}", url, req);
+        return this.ttOpBaseService.get(url, TtOpTiktokVideoCommentResult.class);
+    }
+
+    @Override
+    public TtOpTiktokVideoCommentResult getTiktokVideoCommentReplies(TtOpTiktokVideoCommentRequest req, String commentId) {
+        log.debug("查询评论的回复列表数据, req={}, comment_id={}", req, commentId);
+        String rawUrl = GET_TIKTOK_VIDEO_COMMENT_REPLY_URL.getUrl(getTtOpConfigStorage());
+        String accessToken = this.ttOpBaseService.getTicket(TtOpTicketType.CLIENT, false);
+        String url = String.format(rawUrl, accessToken, req.getOpenId(), req.getItemId(), req.getCursor(), req.getCount(), req.getSortType(), commentId);
+        log.debug("url={}, req={}", url, req);
+        return this.ttOpBaseService.get(url, TtOpTiktokVideoCommentResult.class);
     }
 }

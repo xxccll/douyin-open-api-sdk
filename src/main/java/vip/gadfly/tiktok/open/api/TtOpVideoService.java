@@ -41,4 +41,20 @@ public interface TtOpVideoService {
      * @return
      */
     TtOpTiktokVideoPOIResult getTiktokVideoPOI(TtOpTiktokVideoPOIRequest request);
+
+
+    /**
+     * 查询视频的评论信息
+     * @param request
+     * @return
+     */
+    TtOpTiktokVideoCommentResult getTiktokVideoComments(TtOpTiktokVideoCommentRequest request);
+
+    /**
+     * 查询评论的回复列表
+     * @param request
+     * @return
+     */
+    TtOpTiktokVideoCommentResult getTiktokVideoCommentReplies(TtOpTiktokVideoCommentRequest request, String commentId);
+
 }
