@@ -23,7 +23,7 @@ public class TtOpTiktokShareIdRequest {
     @JsonAlias("need_callback")
     @JsonProperty("need_callback")
     @SerializedName("need_callback")
-    private Boolean needCallback;
+    private Boolean needCallback = true;
     /**
      * 每页数量
      */
@@ -31,7 +31,7 @@ public class TtOpTiktokShareIdRequest {
     @JsonAlias("source_style_id")
     @JsonProperty("source_style_id")
     @SerializedName("source_style_id")
-    private String sourceStyleId;
+    private String sourceStyleId = "";
     /**
      * 查询关键字，例如美食
      */
@@ -39,7 +39,7 @@ public class TtOpTiktokShareIdRequest {
     @JsonAlias("default_hashtag")
     @JsonProperty("default_hashtag")
     @SerializedName("default_hashtag")
-    private String defaultHashtag;
+    private String defaultHashtag = "";
     /**
      * 查询城市，例如上海、北京
      */
@@ -47,5 +47,5 @@ public class TtOpTiktokShareIdRequest {
     @JsonAlias("link_param")
     @JsonProperty("link_param")
     @SerializedName("link_param")
-    private String linkParam;
+    private String linkParam = "";
 }
