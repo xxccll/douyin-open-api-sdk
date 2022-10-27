@@ -34,6 +34,14 @@ public interface TtOpVideoService {
      */
     TtOpTiktokVideoDataResult getTiktokSpecificVideoData(String openId, TtOpTiktokVideoDataRequest request);
 
+    /**
+     * 生成视频的 shareId
+     *
+     * @param openId  用户openid
+     * @param request 视频id list
+     * @return 结果
+     */
+    TtOpTiktokShareIdResult createShareId(TtOpTiktokShareIdRequest request);
 
     /**
      * 查询视频携带的地点信息

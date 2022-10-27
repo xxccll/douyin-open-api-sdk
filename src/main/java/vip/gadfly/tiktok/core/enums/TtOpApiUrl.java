@@ -134,6 +134,11 @@ public interface TtOpApiUrl {
         GET_TIKTOK_SPECIFIC_VIDEO_DATA_URL(TIKTOK_OPEN_API_HOST_URL, "/video/data/?open_id=%s&access_token=%s"),
 
         /**
+         * 分享视频时生成shareId,方便接受推送
+         */
+        GET_TIKTOK_SHARE_ID_URL(TIKTOK_OPEN_API_HOST_URL, "/share-id/?access_token=%s&need_callback=%s&source_style_id=%s&default_hashtag=%s&link_param=%s"),
+
+        /**
          * 查询视频携带的地点信息
          */
         GET_TIKTOK_VIDEO_POI_URL(TIKTOK_OPEN_API_HOST_URL, "/poi/search/keyword/?access_token=%s"),

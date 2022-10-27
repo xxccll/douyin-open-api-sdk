@@ -55,6 +55,16 @@ public class TtOpVideoServiceImpl implements TtOpVideoService {
     }
 
     @Override
+    public TtOpTiktokShareIdResult createShareId(TtOpTiktokShareIdRequest req) {
+        log.debug("生成视频shareId，收到的参数：request={}", req);
+        String rawUrl = GET_TIKTOK_SHARE_ID_URL.getUrl(getTtOpConfigStorage());
+        String accessToken = this.ttOpBaseService.getTicket(TtOpTicketType.CLIENT, false);
+        String url = String.format(rawUrl, accessToken, req.getNeedCallback(), req.getSourceStyleId(), req.getDefaultHashtag(), req.getLinkParam());
+        log.debug("url={}", url);
+        return this.ttOpBaseService.get(url, TtOpTiktokShareIdResult.class);
+    }
+
+    @Override
     public TtOpTiktokVideoPOIResult getTiktokVideoPOI(TtOpTiktokVideoPOIRequest request) {
         log.debug("查询特定视频的视频数据, request={}", request);
         String rawUrl = GET_TIKTOK_VIDEO_POI_URL.getUrl(getTtOpConfigStorage());
