@@ -44,6 +44,7 @@ public class TtOpRedisConfigImpl extends TtOpDefaultConfigImpl {
         this.lockKey = String.format(LOCK_KEY_TPL, this.keyPrefix, clientKey);
         jsapiTicketLock = this.redisOps.getLock(lockKey.concat("jsapiTicketLock"));
         clientTicketLock = this.redisOps.getLock(lockKey.concat("clientTicketLock"));
+        openTicketLock = this.redisOps.getLock(lockKey.concat("openTicketLock"));
     }
 
     @Override
