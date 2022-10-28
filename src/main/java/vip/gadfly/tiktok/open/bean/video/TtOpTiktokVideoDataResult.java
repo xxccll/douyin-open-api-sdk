@@ -109,6 +109,14 @@ public class TtOpTiktokVideoDataResult extends TtOpBaseResult {
         @JsonProperty("media_type")
         @SerializedName("media_type")
         private Integer mediaType;
+        /**
+         * 视频 id
+         */
+        @JSONField(name = "video_id")
+        @JsonAlias("video_id")
+        @JsonProperty("video_id")
+        @SerializedName("video_id")
+        private String videoId;
 
         @NoArgsConstructor
         @Data

@@ -41,7 +41,7 @@ public class TtOpTiktokVideoCommentRequest {
     @JsonAlias("count")
     @JsonProperty("count")
     @SerializedName("count")
-    private long count = 10;
+    private int count = 10;
     /**
      * 视频id @8hxdhauTCMppanGnM4ltGM780mDqPP+KPpR0qQOmLVAXb/T060zdRmYqig357zEBq6CZRp4NVe6qLIJW/V/x1w==
      */
