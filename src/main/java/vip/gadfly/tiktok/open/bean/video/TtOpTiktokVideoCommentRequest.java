@@ -8,7 +8,7 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 
 /**
- * https://open.douyin.com/platform/doc/6848798087398328323
+ * https://developer.open-douyin.com/docs/resource/zh-CN/dop/develop/openapi/interaction-management/comment-management-user/comment-list
  *
  * @author Gadfly
  * @since 2021-09-30 10:32
@@ -33,7 +33,7 @@ public class TtOpTiktokVideoCommentRequest {
     @JsonAlias("cursor")
     @JsonProperty("cursor")
     @SerializedName("cursor")
-    private Long cursor;
+    private long cursor;
     /**
      * 	每页的数量，最大不超过50，最小不低于1
      */
@@ -41,7 +41,7 @@ public class TtOpTiktokVideoCommentRequest {
     @JsonAlias("count")
     @JsonProperty("count")
     @SerializedName("count")
-    private Integer count;
+    private long count = 10;
     /**
      * 视频id @8hxdhauTCMppanGnM4ltGM780mDqPP+KPpR0qQOmLVAXb/T060zdRmYqig357zEBq6CZRp4NVe6qLIJW/V/x1w==
      */
@@ -57,5 +57,5 @@ public class TtOpTiktokVideoCommentRequest {
     @JsonAlias("sort_type")
     @JsonProperty("sort_type")
     @SerializedName("sort_type")
-    private String sortType;
+    private String sortType = "time";
 }

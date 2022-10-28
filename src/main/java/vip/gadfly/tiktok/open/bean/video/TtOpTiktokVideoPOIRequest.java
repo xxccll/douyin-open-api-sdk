@@ -10,7 +10,7 @@ import lombok.experimental.Accessors;
 import java.util.List;
 
 /**
- * https://open.douyin.com/platform/doc/6848798087398328323
+ * https://developer.open-douyin.com/docs/resource/zh-CN/dop/develop/openapi/video-management/douyin/search-video/video-poi
  *
  * @author Gadfly
  * @since 2021-09-30 10:32
@@ -25,7 +25,7 @@ public class TtOpTiktokVideoPOIRequest {
     @JsonAlias("cursor")
     @JsonProperty("cursor")
     @SerializedName("cursor")
-    private Long cursor;
+    private long cursor;
     /**
      * 每页数量
      */
@@ -33,7 +33,7 @@ public class TtOpTiktokVideoPOIRequest {
     @JsonAlias("count")
     @JsonProperty("count")
     @SerializedName("count")
-    private Long count;
+    private long count = 10;
     /**
      * 查询关键字，例如美食
      */
@@ -41,7 +41,7 @@ public class TtOpTiktokVideoPOIRequest {
     @JsonAlias("keyword")
     @JsonProperty("keyword")
     @SerializedName("keyword")
-    private String keyword;
+    private String keyword = "";
     /**
      * 查询城市，例如上海、北京
      */
@@ -49,5 +49,5 @@ public class TtOpTiktokVideoPOIRequest {
     @JsonAlias("city")
     @JsonProperty("city")
     @SerializedName("city")
-    private String city;
+    private String city = "";
 }

@@ -8,7 +8,7 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 
 /**
- * https://open.douyin.com/platform/doc/6848798087398328323
+ * https://developer.open-douyin.com/docs/resource/zh-CN/dop/develop/openapi/video-management/douyin/search-video/video-share-result
  *
  * @author Gadfly
  * @since 2021-09-30 10:32
