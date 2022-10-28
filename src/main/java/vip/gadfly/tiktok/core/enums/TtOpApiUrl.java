@@ -136,16 +136,27 @@ public interface TtOpApiUrl {
         /**
          * 分享视频时生成shareId,方便接受推送
          */
-        GET_TIKTOK_SHARE_ID_URL(TIKTOK_OPEN_API_HOST_URL, "/share-id/?access_token=%s&need_callback=%s&source_style_id=%s&default_hashtag=%s&link_param=%s"),
+        CREATE_TIKTOK_SHARE_ID_URL(TIKTOK_OPEN_API_HOST_URL, "/share-id/?access_token=%s&need_callback=%s&source_style_id=%s&default_hashtag=%s&link_param=%s"),
 
         /**
          * 查询视频携带的地点信息
          */
         GET_TIKTOK_VIDEO_POI_URL(TIKTOK_OPEN_API_HOST_URL, "/poi/search/keyword/?access_token=%s"),
 
+        /**
+         * 查询评论列表
+         */
         GET_TIKTOK_VIDEO_COMMENT_URL(TIKTOK_OPEN_API_HOST_URL, "/item/comment/list/?access_token=%s&open_id=%s&item_id=%s&cursor=%s&count=%s&sort_type=%s"),
 
+        /**
+         * 查询评论回复
+         */
         GET_TIKTOK_VIDEO_COMMENT_REPLY_URL(TIKTOK_OPEN_API_HOST_URL, "/item/comment/reply/list/?access_token=%s&open_id=%s&item_id=%s&cursor=%s&count=%s&sort_type=%s&comment_id=%s"),
+
+        /**
+         * 创建视频评论
+         */
+        CREATE_TIKTOK_COMMENT_URL(TIKTOK_OPEN_API_HOST_URL, "/item/comment/reply/?open_id=%s&access_token=%s"),
         ;
 
         private final String prefix;

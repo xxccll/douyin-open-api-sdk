@@ -57,7 +57,7 @@ public class TtOpVideoServiceImpl implements TtOpVideoService {
     @Override
     public TtOpTiktokShareIdResult createShareId(TtOpTiktokShareIdRequest req) {
         log.debug("生成视频shareId，收到的参数：request={}", req);
-        String rawUrl = GET_TIKTOK_SHARE_ID_URL.getUrl(getTtOpConfigStorage());
+        String rawUrl = CREATE_TIKTOK_SHARE_ID_URL.getUrl(getTtOpConfigStorage());
         String accessToken = this.ttOpBaseService.getTicket(TtOpTicketType.CLIENT, false);
         String url = String.format(rawUrl, accessToken, req.getNeedCallback(), req.getSourceStyleId(), req.getDefaultHashtag(), req.getLinkParam());
         log.debug("url={}", url);
@@ -91,5 +91,15 @@ public class TtOpVideoServiceImpl implements TtOpVideoService {
         String url = String.format(rawUrl, accessToken, req.getOpenId(), req.getItemId(), req.getCursor(), req.getCount(), req.getSortType(), commentId);
         log.debug("url={}, req={}", url, req);
         return this.ttOpBaseService.get(url, TtOpTiktokVideoCommentResult.class);
+    }
+
+    @Override
+    public TtOpTiktokVideoCommentCreateResult createTiktokVideoComment(String openId, TtOpTiktokVideoCommentCreateRequest request) {
+        log.debug("发布视频评论, 收到的参数：openId={}, request={}", openId, request);
+        String rawUrl = CREATE_TIKTOK_COMMENT_URL.getUrl(getTtOpConfigStorage());
+        String accessToken = this.ttOpBaseService.getTicket(TtOpTicketType.CLIENT, false);
+        String url = String.format(rawUrl, openId, accessToken);
+        log.debug("url={}, request={}", url, request);
+        return this.ttOpBaseService.post(url, request, TtOpTiktokVideoCommentCreateResult.class);
     }
 }

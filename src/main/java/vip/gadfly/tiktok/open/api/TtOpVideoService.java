@@ -65,4 +65,13 @@ public interface TtOpVideoService {
      */
     TtOpTiktokVideoCommentResult getTiktokVideoCommentReplies(TtOpTiktokVideoCommentRequest request, String commentId);
 
+    /**
+     *
+     * 回复视频评论
+     * @param openId 用户唯一标志
+     * @param request 评论请求
+     * @return
+     */
+    TtOpTiktokVideoCommentCreateResult createTiktokVideoComment(String openId, TtOpTiktokVideoCommentCreateRequest request);
+
 }
