@@ -95,6 +95,24 @@ public class TtOpWebhookMessage implements Serializable {
         @SerializedName("item_id")
         private String itemId;
         /**
+         * 创建的视频id,可以直接拼接抖音域名打开 https://www.douyin.com/video/video_id
+         * 创建的视频id
+         */
+        @JSONField(name = "video_id")
+        @JsonAlias("video_id")
+        @JsonProperty("video_id")
+        @SerializedName("video_id")
+        private String videoId;
+        /**
+         * 追踪分享默认hashtag
+         * 追踪分享默认hashtag
+         */
+        @JSONField(name = "has_default_hashtag")
+        @JsonAlias("has_default_hashtag")
+        @JsonProperty("has_default_hashtag")
+        @SerializedName("has_default_hashtag")
+        private String hasDefaultHashtag;
+        /**
          * 标识分享的share_id
          */
         @JSONField(name = "share_id")

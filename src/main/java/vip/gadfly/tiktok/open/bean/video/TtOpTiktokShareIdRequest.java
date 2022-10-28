@@ -17,7 +17,7 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class TtOpTiktokShareIdRequest {
     /**
-     * 分页游标, 第一页请求cursor是0, response中会返回下一页请求用到的cursor, 同时response还会返回has_more来表明是否有更多的数据。
+     * 如果需要知道视频分享成功的结果，need_callback设置为true
      */
     @JSONField(name = "need_callback")
     @JsonAlias("need_callback")
@@ -25,7 +25,7 @@ public class TtOpTiktokShareIdRequest {
     @SerializedName("need_callback")
     private Boolean needCallback = true;
     /**
-     * 每页数量
+     * 多来源样式id（暂未开放）
      */
     @JSONField(name = "source_style_id")
     @JsonAlias("source_style_id")
@@ -33,7 +33,7 @@ public class TtOpTiktokShareIdRequest {
     @SerializedName("source_style_id")
     private String sourceStyleId = "";
     /**
-     * 查询关键字，例如美食
+     * 追踪分享默认hashtag
      */
     @JSONField(name = "default_hashtag")
     @JsonAlias("default_hashtag")
@@ -41,7 +41,7 @@ public class TtOpTiktokShareIdRequest {
     @SerializedName("default_hashtag")
     private String defaultHashtag = "";
     /**
-     * 查询城市，例如上海、北京
+     * 分享来源url附加参数（暂未开放）
      */
     @JSONField(name = "link_param")
     @JsonAlias("link_param")
