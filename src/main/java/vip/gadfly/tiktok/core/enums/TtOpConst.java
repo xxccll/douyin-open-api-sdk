@@ -18,6 +18,7 @@ public class TtOpConst {
         public static final String ITEM_DIGG = "item_digg";
         public static final String USER_FOLLOW = "user_follow";
         public static final String ENTERPRISE_COMMENT_EVENT = "enterprise_comment_event";
+        public static final String ITEM_COMMENT_REPLY = "item_comment_reply";
     }
 
     /**

@@ -249,6 +249,88 @@ public class TtOpWebhookMessage implements Serializable {
         @SerializedName("action_type")
         private Integer actionType;
 
+        /**
+         * 点赞数(来源视频评论)
+         */
+        @JSONField(name = "digg_count")
+        @JsonAlias("digg_count")
+        @JsonProperty("digg_count")
+        @SerializedName("digg_count")
+        private Integer diggCount;
+
+        /**
+         * 评论用户openid(来源视频评论)
+         */
+        @JSONField(name = "comment_user_id")
+        @JsonAlias("comment_user_id")
+        @JsonProperty("comment_user_id")
+        @SerializedName("comment_user_id")
+        private String commentUserId;
+
+        /**
+         * 评论内容(来源视频评论)
+         */
+        @JSONField(name = "content")
+        @JsonAlias("content")
+        @JsonProperty("content")
+        @SerializedName("content")
+        private String content;
+
+        /**
+         * 回复总数(来源视频评论)
+         */
+        @JSONField(name = "reply_comment_total")
+        @JsonAlias("reply_comment_total")
+        @JsonProperty("reply_comment_total")
+        @SerializedName("reply_comment_total")
+        private Integer replyCommentTotal;
+
+        /**
+         * 回复的评论 id(来源视频评论)
+         */
+        @JSONField(name = "reply_to_comment_id")
+        @JsonAlias("reply_to_comment_id")
+        @JsonProperty("reply_to_comment_id")
+        @SerializedName("reply_to_comment_id")
+        private String replyToCommentId;
+
+        /**
+         * 回复的视频 id(来源视频评论)
+         */
+        @JSONField(name = "reply_to_item_id")
+        @JsonAlias("reply_to_item_id")
+        @JsonProperty("reply_to_item_id")
+        @SerializedName("reply_to_item_id")
+        private String replyToItemId;
+
+        /**
+         * @ 的用户 id(来源视频评论)
+         */
+        @JSONField(name = "at_user_id")
+        @JsonAlias("at_user_id")
+        @JsonProperty("at_user_id")
+        @SerializedName("at_user_id")
+        private String atUserId;
+
+        /**
+         * 评论id id(来源视频评论)
+         */
+        @JSONField(name = "comment_id")
+        @JsonAlias("comment_id")
+        @JsonProperty("comment_id")
+        @SerializedName("comment_id")
+        private String commentId;
+
+        /**
+         * 评论时间(来源视频评论)
+         */
+        @JSONField(name = "create_time")
+        @JsonAlias("create_time")
+        @JsonProperty("create_time")
+        @SerializedName("create_time")
+        private Integer createTime;
+
+
         @Data
         public static class ActionInfo {
             @JSONField(name = "name")
