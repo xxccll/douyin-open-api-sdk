@@ -18,10 +18,10 @@ public class TtOpTiktokVideoCommentCreateRequest {
     /**
      * 视频id @8hxdhauTCMppanGnM4ltGM780mDqPP+KPpR0qQOmLVAXb/T060zdRmYqig357zEBq6CZRp4NVe6qLIJW/V/x1w==
      */
-    @JSONField(name = "itemId")
-    @JsonAlias("itemId")
-    @JsonProperty("itemId")
-    @SerializedName("itemId")
+    @JSONField(name = "item_id")
+    @JsonAlias("item_id")
+    @JsonProperty("item_id")
+    @SerializedName("item_id")
     private String itemId;
 
     /**
@@ -31,7 +31,7 @@ public class TtOpTiktokVideoCommentCreateRequest {
     @JsonAlias("comment_id")
     @JsonProperty("comment_id")
     @SerializedName("comment_id")
-    private String commentId = "";
+    private String commentId;
     /**
      *  评论的具体内容
      */
