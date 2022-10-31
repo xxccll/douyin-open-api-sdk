@@ -77,7 +77,7 @@ public class TtOpVideoServiceImpl implements TtOpVideoService {
     public TtOpTiktokVideoCommentResult getTiktokVideoComments(TtOpTiktokVideoCommentRequest req) {
         log.debug("查询特定视频的评论数据, req={}", req);
         String rawUrl = GET_TIKTOK_VIDEO_COMMENT_URL.getUrl(getTtOpConfigStorage());
-        String accessToken = this.ttOpBaseService.getTicket(TtOpTicketType.CLIENT, false);
+        String accessToken = this.ttOpBaseService.getAccessToken(req.getOpenId());
         String url = String.format(rawUrl, accessToken, req.getOpenId(), req.getItemId(), req.getCursor(), req.getCount(), req.getSortType());
         log.debug("url={}, req={}", url, req);
         return this.ttOpBaseService.get(url, TtOpTiktokVideoCommentResult.class);
@@ -87,7 +87,7 @@ public class TtOpVideoServiceImpl implements TtOpVideoService {
     public TtOpTiktokVideoCommentResult getTiktokVideoCommentReplies(TtOpTiktokVideoCommentRequest req, String commentId) {
         log.debug("查询评论的回复列表数据, req={}, comment_id={}", req, commentId);
         String rawUrl = GET_TIKTOK_VIDEO_COMMENT_REPLY_URL.getUrl(getTtOpConfigStorage());
-        String accessToken = this.ttOpBaseService.getTicket(TtOpTicketType.CLIENT, false);
+        String accessToken = this.ttOpBaseService.getAccessToken(req.getOpenId());
         String url = String.format(rawUrl, accessToken, req.getOpenId(), req.getItemId(), req.getCursor(), req.getCount(), req.getSortType(), commentId);
         log.debug("url={}, req={}", url, req);
         return this.ttOpBaseService.get(url, TtOpTiktokVideoCommentResult.class);
@@ -97,7 +97,7 @@ public class TtOpVideoServiceImpl implements TtOpVideoService {
     public TtOpTiktokVideoCommentCreateResult createTiktokVideoComment(String openId, TtOpTiktokVideoCommentCreateRequest request) {
         log.debug("发布视频评论, 收到的参数：openId={}, request={}", openId, request);
         String rawUrl = CREATE_TIKTOK_COMMENT_URL.getUrl(getTtOpConfigStorage());
-        String accessToken = this.ttOpBaseService.getTicket(TtOpTicketType.CLIENT, false);
+        String accessToken = this.ttOpBaseService.getAccessToken(openId);
         String url = String.format(rawUrl, openId, accessToken);
         log.debug("url={}, request={}", url, request);
         return this.ttOpBaseService.post(url, request, TtOpTiktokVideoCommentCreateResult.class);
