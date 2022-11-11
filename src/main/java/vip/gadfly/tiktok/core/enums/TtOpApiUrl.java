@@ -141,7 +141,7 @@ public interface TtOpApiUrl {
         /**
          * 查询视频携带的地点信息
          */
-        GET_TIKTOK_VIDEO_POI_URL(TIKTOK_OPEN_API_HOST_URL, "/poi/search/keyword/?access_token=%s"),
+        GET_TIKTOK_VIDEO_POI_URL(TIKTOK_OPEN_API_HOST_URL, "/poi/search/keyword/?access_token=%s&cursor=%s&count=%s&keyword=%s&city=%s"),
 
         /**
          * 查询评论列表

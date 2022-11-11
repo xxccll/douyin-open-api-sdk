@@ -10,6 +10,8 @@ import vip.gadfly.tiktok.open.api.TtOpVideoService;
 import vip.gadfly.tiktok.open.bean.video.*;
 import vip.gadfly.tiktok.open.common.ITtOpBaseService;
 
+import java.net.URLEncoder;
+
 import static vip.gadfly.tiktok.core.enums.TtOpApiUrl.Video.*;
 
 /**
@@ -66,11 +68,17 @@ public class TtOpVideoServiceImpl implements TtOpVideoService {
 
     @Override
     public TtOpTiktokVideoPOIResult getTiktokVideoPOI(TtOpTiktokVideoPOIRequest request) {
-        log.debug("查询特定视频的视频数据, request={}", request);
+        log.debug("查询POI数据, request={}", request);
         String rawUrl = GET_TIKTOK_VIDEO_POI_URL.getUrl(getTtOpConfigStorage());
-        String url = String.format(rawUrl, this.ttOpBaseService.getTicket(TtOpTicketType.CLIENT, false));
+        String url = String.format(rawUrl,
+                this.ttOpBaseService.getTicket(TtOpTicketType.CLIENT, false),
+                request.getCursor(),
+                request.getCount(),
+                request.getKeyword(),
+                request.getCity()
+        );
         log.debug("url={}, request={}", url, request);
-        return this.ttOpBaseService.post(url, request, TtOpTiktokVideoPOIResult.class);
+        return this.ttOpBaseService.get(url, TtOpTiktokVideoPOIResult.class);
     }
 
     @Override
