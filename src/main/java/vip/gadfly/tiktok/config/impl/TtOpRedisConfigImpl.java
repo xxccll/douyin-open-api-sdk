@@ -81,6 +81,8 @@ public class TtOpRedisConfigImpl extends TtOpDefaultConfigImpl {
 
     @Override
     public String getRefreshToken(String openid) {
+        String key = this.getRefreshTokenRedisKey(openid);
+        System.out.println("getRefreshTokenRedisKey=" + key);
         return redisOps.getValue(this.getRefreshTokenRedisKey(openid));
     }
 
@@ -97,10 +99,10 @@ public class TtOpRedisConfigImpl extends TtOpDefaultConfigImpl {
 
     @Override
     public synchronized void updateRefreshToken(TtOpAccessTokenResult refreshToken) {
-        updateRefreshToken(this.getRefreshTokenRedisKey(refreshToken.getOpenId()), refreshToken.getRefreshToken(),
-                refreshToken.getRefreshExpiresIn() < 10
-                        ? refreshToken.getExpiresIn()
-                        : refreshToken.getRefreshExpiresIn());
+        int expiresInSeconds = refreshToken.getRefreshExpiresIn() < 10
+                ? refreshToken.getExpiresIn()
+                : refreshToken.getRefreshExpiresIn();
+        updateRefreshToken(refreshToken.getOpenId(), refreshToken.getRefreshToken(), expiresInSeconds);
     }
 
     @Override

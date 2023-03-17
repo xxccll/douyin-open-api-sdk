@@ -1,13 +1,11 @@
 package vip.gadfly.tiktok.core.http.impl;
 
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
+import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.Multimap;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.FileSystemResource;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
@@ -16,9 +14,12 @@ import vip.gadfly.tiktok.core.util.json.JsonSerializer;
 import vip.gadfly.tiktok.core.util.json.TiktokOpenJsonBuilder;
 
 import java.io.File;
+import java.lang.ref.ReferenceQueue;
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.LinkedHashMap;
 
 /**
  * @author Clevo
@@ -76,8 +77,9 @@ public class RestTemplateTtOpHttpClient extends AbstractTtOpHttpClient {
 
     @Override
     public <T> T doPost(String url, Object request, Class<T> t) {
-        String result = restTemplate.postForObject(url, request, String.class);
-        return this.getJsonSerializer().parseResponse(result, t);
+//        String result = restTemplate.postForObject(url, request, String.class);
+//        return this.getJsonSerializer().parseResponse(result, t);
+        return this.doPostWithHeaders(url, LinkedListMultimap.create(), request, t);
     }
 
     @Override
@@ -90,8 +92,15 @@ public class RestTemplateTtOpHttpClient extends AbstractTtOpHttpClient {
                 httpHeaders.add(headerName, headerValue);
             }
         }
-        MultiValueMap<String, Object> param = (MultiValueMap<String, Object>) handlerRequestParam(request);
-        ResponseEntity<String> responseEntity = restTemplate.postForEntity(url, new HttpEntity<>(param, httpHeaders), String.class);
+        Object httpEntity;
+        if (httpHeaders.getContentType() == null) {
+            httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+            httpEntity = new HttpEntity<>(getJsonSerializer().toJson(request), httpHeaders);
+        } else {
+            MultiValueMap<String, Object> param = (MultiValueMap<String, Object>) handlerRequestParam(request);
+            httpEntity = new HttpEntity<>(param, httpHeaders);
+        }
+        ResponseEntity<String> responseEntity = restTemplate.postForEntity(url, httpEntity, String.class);
         return this.getJsonSerializer().parseResponse(responseEntity.getBody(), t);
     }
 
@@ -100,6 +109,9 @@ public class RestTemplateTtOpHttpClient extends AbstractTtOpHttpClient {
         MultiValueMap<String, Object> paramsMap = new LinkedMultiValueMap<>();
         Field[] fields = requestParams.getClass().getDeclaredFields();
         for (Field field : fields) {
+            if (java.lang.reflect.Modifier.isStatic(field.getModifiers())) {
+                continue;
+            }
             field.setAccessible(true);
             Object value;
             try {

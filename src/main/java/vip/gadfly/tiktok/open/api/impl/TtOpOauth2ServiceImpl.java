@@ -46,41 +46,54 @@ public class TtOpOauth2ServiceImpl implements TtOpOAuth2Service {
     @Override
     public TtOpAccessTokenResult getAccessTokenByAuthorizationCode(String authorizationCode) {
         log.debug("使用授权码换取用户信息的接口调用凭据，收到的参数：authorizationCode={}", authorizationCode);
-        String url = OAUTH2_ACCESS_TOKEN_URL.getUrl(getTtOpConfigStorage());
+        TtOpConfigStorage ttOpConfigStorage = getTtOpConfigStorage();
+        String url = OAUTH2_ACCESS_TOKEN_URL.getUrl(ttOpConfigStorage);
         log.debug("url={}", url);
         TtOpAccessTokenRequest request = new TtOpAccessTokenRequest()
                 .setGrantType(TtOpAccessTokenRequest.GRANT_TYPE_CODE)
-                .setClientKey(getTtOpConfigStorage().getClientKey())
-                .setClientSecret(getTtOpConfigStorage().getClientSecret())
+                .setClientKey(ttOpConfigStorage.getClientKey())
+                .setClientSecret(ttOpConfigStorage.getClientSecret())
                 .setCode(authorizationCode);
-        TtOpAccessTokenResult result = this.ttOpBaseService.post(url, request, TtOpAccessTokenResult.class);
-        this.getTtOpConfigStorage().updateAccessToken(result);
+        Multimap<String, String> headers = LinkedListMultimap.create();
+        headers.put("Content-Type", "application/x-www-form-urlencoded");
+        TtOpAccessTokenResult result = this.ttOpBaseService.postWithHeaders(url, headers, request, TtOpAccessTokenResult.class);
+        ttOpConfigStorage.updateAccessToken(result);
+        ttOpConfigStorage.updateRefreshToken(result);
         return result;
     }
 
     @Override
     public TtOpAccessTokenResult refreshAccessToken(String openid) {
-        String url = OAUTH2_REFRESH_TOKEN_URL.getUrl(getTtOpConfigStorage());
-        log.debug("url={}", url);
+        TtOpConfigStorage ttOpConfigStorage = getTtOpConfigStorage();
+        String url = OAUTH2_REFRESH_TOKEN_URL.getUrl(ttOpConfigStorage);
+        String refreshToken = ttOpConfigStorage.getRefreshToken(openid);
+        log.debug("url={},rft={}", url, refreshToken);
         TtOpAccessTokenRequest request = new TtOpAccessTokenRequest()
                 .setGrantType(TtOpAccessTokenRequest.GRANT_TYPE_REFRESH)
-                .setClientKey(getTtOpConfigStorage().getClientKey())
-                .setClientSecret(getTtOpConfigStorage().getClientSecret());
-        TtOpAccessTokenResult result = this.ttOpBaseService.post(url, request, TtOpAccessTokenResult.class);
-        this.getTtOpConfigStorage().updateAccessToken(result);
+                .setClientKey(ttOpConfigStorage.getClientKey())
+                .setRefreshToken(refreshToken)
+                ;
+        Multimap<String, String> headers = LinkedListMultimap.create();
+        headers.put("Content-Type", "application/x-www-form-urlencoded");
+        TtOpAccessTokenResult result = this.ttOpBaseService.postWithHeaders(url, headers, request, TtOpAccessTokenResult.class);
+        ttOpConfigStorage.updateAccessToken(result);
         return result;
     }
 
     @Override
     public TtOpAccessTokenResult renewRefreshToken(String openid) {
-        String url = OAUTH2_RENEW_REFRESH_TOKEN_URL.getUrl(getTtOpConfigStorage());
-        log.debug("url={}", url);
+        TtOpConfigStorage ttOpConfigStorage = getTtOpConfigStorage();
+        String refreshToken = ttOpConfigStorage.getRefreshToken(openid);
+        String url = OAUTH2_RENEW_REFRESH_TOKEN_URL.getUrl(ttOpConfigStorage);
+        log.debug("url={},rft={}", url, refreshToken);
         TtOpAccessTokenRequest request = new TtOpAccessTokenRequest()
-                .setGrantType(null)
-                .setClientKey(getTtOpConfigStorage().getClientKey())
-                .setClientSecret(getTtOpConfigStorage().getClientSecret());
-        TtOpAccessTokenResult result = this.ttOpBaseService.post(url, request, TtOpAccessTokenResult.class);
-        this.getTtOpConfigStorage().updateAccessToken(result);
+                .setClientKey(ttOpConfigStorage.getClientKey())
+                .setRefreshToken(refreshToken)
+                ;
+        Multimap<String, String> headers = LinkedListMultimap.create();
+        headers.put("Content-Type", "application/x-www-form-urlencoded");
+        TtOpAccessTokenResult result = this.ttOpBaseService.postWithHeaders(url, headers, request, TtOpAccessTokenResult.class);
+        ttOpConfigStorage.updateRefreshToken(openid, result.getRefreshToken(), result.getExpiresIn());
         return result;
     }
 
@@ -89,14 +102,17 @@ public class TtOpOauth2ServiceImpl implements TtOpOAuth2Service {
         if (!forceRefresh) {
             return ttOpBaseService.getTicket(TtOpTicketType.CLIENT);
         }
-        String url = OAUTH2_CLIENT_TOKEN_URL.getUrl(getTtOpConfigStorage());
+        TtOpConfigStorage ttOpConfigStorage = getTtOpConfigStorage();
+        String url = OAUTH2_CLIENT_TOKEN_URL.getUrl(ttOpConfigStorage);
         log.debug("url={}", url);
         TtOpAccessTokenRequest request = new TtOpAccessTokenRequest()
                 .setGrantType(TtOpAccessTokenRequest.GRANT_TYPE_CLIENT)
-                .setClientKey(getTtOpConfigStorage().getClientKey())
-                .setClientSecret(getTtOpConfigStorage().getClientSecret());
-        TtOpAccessTokenResult result = this.ttOpBaseService.post(url, request, TtOpAccessTokenResult.class);
-        this.getTtOpConfigStorage().updateTicket(TtOpTicketType.CLIENT, result.getAccessToken(), result.getExpiresIn());
+                .setClientKey(ttOpConfigStorage.getClientKey())
+                .setClientSecret(ttOpConfigStorage.getClientSecret());
+        Multimap<String, String> headers = LinkedListMultimap.create();
+        headers.put("Content-Type", "multipart/form-data");
+        TtOpAccessTokenResult result = this.ttOpBaseService.postWithHeaders(url, headers, request, TtOpAccessTokenResult.class);
+        ttOpConfigStorage.updateTicket(TtOpTicketType.CLIENT, result.getAccessToken(), result.getExpiresIn());
         return result.getAccessToken();
     }
 

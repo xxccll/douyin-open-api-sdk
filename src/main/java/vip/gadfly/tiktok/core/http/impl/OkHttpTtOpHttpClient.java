@@ -79,23 +79,41 @@ public class OkHttpTtOpHttpClient extends AbstractTtOpHttpClient {
             String headerValue = headersMap.get(headerName);
             headersBuilder.add(headerName, headerValue);
         }
-        Map<String, Object> paramsMap = (Map<String, Object>) handlerRequestParam(requestParam);
-        MultipartBody.Builder requestBodyBuilder = new MultipartBody.Builder();
-
-        if (headersMap.get("Content-Type") != null && headersMap.get("Content-Type").contains("form-data")) {
-            requestBodyBuilder = requestBodyBuilder.setType(MultipartBody.FORM);
+        String contentType = headersBuilder.get("Content-Type");
+        if (contentType == null) {
+            contentType = JSON.toString();
         }
-
-        for (String paramName : paramsMap.keySet()) {
-            if (paramsMap.get(paramName) instanceof File) {
-                File file = (File) paramsMap.get(paramName);
-                requestBodyBuilder = requestBodyBuilder.addFormDataPart(paramName, file.getName(), RequestBody.create(file, null));
-            } else {
-                requestBodyBuilder = requestBodyBuilder.addFormDataPart(paramName, (String) paramsMap.get(paramName));
+        RequestBody body = null;
+        while (body == null) {
+            Map<String, Object> paramsMap = (Map<String, Object>) handlerRequestParam(requestParam);
+            if (contentType.contains("multipart/form-data")) {
+                MultipartBody.Builder requestBodyBuilder = new MultipartBody.Builder();
+                requestBodyBuilder.setType(MultipartBody.FORM);
+                for (Map.Entry<String, Object> entry : paramsMap.entrySet()) {
+                    if (entry.getValue() instanceof File) {
+                        File file = (File) entry.getValue();
+                        requestBodyBuilder.addFormDataPart(entry.getKey(), file.getName(), RequestBody.create(file, null));
+                    } else if (entry.getValue() != null) {
+                        requestBodyBuilder.addFormDataPart(entry.getKey(), (String) entry.getValue());
+                    }
+                }
+                body = requestBodyBuilder.build();
+                break;
             }
+            if (contentType.contains("application/x-www-form-urlencoded")) {
+                FormBody.Builder builder = new FormBody.Builder();
+                for (Map.Entry<String, Object> entry : paramsMap.entrySet()) {
+                    if (entry.getValue() != null) {
+                        builder.addEncoded(entry.getKey(), entry.getValue().toString());
+                    }
+                }
+                body = builder.build();
+                break;
+            }
+            String requestJson = getJsonSerializer().toJson(requestParam);
+            body = RequestBody.Companion.create(requestJson.getBytes(StandardCharsets.UTF_8), JSON);
         }
 
-        RequestBody body = requestBodyBuilder.build();
         Request request = new Request.Builder()
                 .headers(headersBuilder.build())
                 .url(url)
